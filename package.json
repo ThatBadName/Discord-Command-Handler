@@ -10,6 +10,14 @@
     "type": "git",
     "url": "git+https://github.com/ThatBadName/Discord-Command-Handler.git"
   },
+  "keywords": [
+    "discord",
+    "command handler",
+    "js",
+    "javascript",
+    "14",
+    "handler"
+  ],
   "author": "ThatBadName",
   "license": "ISC",
   "bugs": {
