@@ -1,0 +1,22 @@
+{
+  "name": "@thatbadname/discord-command-handler",
+  "version": "1.0.0",
+  "description": "An advanced command hander for Discord.JS v14",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThatBadName/Discord-Command-Handler.git"
+  },
+  "author": "ThatBadName",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThatBadName/Discord-Command-Handler/issues"
+  },
+  "homepage": "https://github.com/ThatBadName/Discord-Command-Handler#readme",
+  "dependencies": {
+    "discord-api-types": "^0.37.37"
+  }
+}
