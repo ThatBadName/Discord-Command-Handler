@@ -1,6 +1,6 @@
 {
   "name": "@thatbadname/discord-command-handler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An advanced command hander for Discord.JS v14",
   "main": "src/index.js",
   "scripts": {
