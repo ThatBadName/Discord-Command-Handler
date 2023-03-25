@@ -86,6 +86,16 @@ const DiscordCommandHandler = async (
       console.log(`[AutoRepair] Created events/client dir`)
     }
 
+    if (!fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc`)) {
+      fs.mkdirSync(`${path.join(mainDir, commandsDir)}/Misc`)
+      console.log(`[AutoRepair] Created commands/Misc dir`)
+    }
+
+    if (!fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`)) {
+      fs.writeFileSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`, fs.readFileSync(`${path.join(__dirname)}/defaultFiles/help.js`, 'utf8'))
+      console.log(`[AutoRepair] Created commands/Misc/help.js file`)
+    }
+
     if (!fs.existsSync(`${path.join(mainDir, eventsDir)}/client/ready.js`)) {
       fs.writeFileSync(`${path.join(mainDir, eventsDir)}/client/ready.js`, fs.readFileSync(`${path.join(__dirname)}/defaultFiles/ready.js`, 'utf8'))
       console.log(`[AutoRepair] Created events/client/ready.js file`)
