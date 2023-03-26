@@ -141,7 +141,7 @@ const DiscordCommandHandler = async (
     events: eventsDir,
     database: databaseDir
   }
-  client.ownerIds = [ownerIds]
+  client.ownerIds = ownerIds
   client.ownerOnlyMessage = ownerOnlyMessage
   client.cooldownMessage = cooldownMessage
   client.prefix = prefix
