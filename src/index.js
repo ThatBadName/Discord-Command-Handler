@@ -29,7 +29,9 @@ const DiscordCommandHandler = async (
     },
     ownerIds = [],
     ownerOnlyMessage = 'This command is owner only',
-    cooldownMessage = 'Please try again <t:{time}:R>'
+    cooldownMessage = 'Please try again <t:{time}:R>',
+    prefix = '!',
+    allowPrefixCommands = false,
   }
 ) => {
   // Check that everything is valid  
@@ -53,6 +55,7 @@ const DiscordCommandHandler = async (
     throw new Error(`[Handler] Please provide a valid test server id in your config file: "testGuildId":"<id>"`)
   }
   // Everything is vaild
+
   console.log(`[Handler] Setup has been done correctly. Starting bot`)
 
   client.config = require(path.join(mainDir, configFile))
@@ -67,7 +70,12 @@ const DiscordCommandHandler = async (
     ...components
   }
 
-  if (builtIn.automaticRepair === true) {
+  const built = {
+    ...builtIn
+  }
+
+  console.log(path.join(mainDir, eventsDir))
+  if (built.automaticRepair === true) {
     if (!fs.existsSync(`${path.join(mainDir, commandsDir)}`)) {
       fs.mkdirSync(`${path.join(mainDir, commandsDir)}`)
       console.log(`[AutoRepair] Created commands dir`)
@@ -98,12 +106,12 @@ const DiscordCommandHandler = async (
       console.log(`[AutoRepair] Created events/client dir`)
     }
 
-    if (builtIn.helpCommand===true && !fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc`)) {
+    if (built.helpCommand===true && !fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc`)) {
       fs.mkdirSync(`${path.join(mainDir, commandsDir)}/Misc`)
       console.log(`[AutoRepair] Created commands/Misc dir`)
     }
 
-    if (builtIn.helpCommand===true && !fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`)) {
+    if (built.helpCommand===true && !fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`)) {
       fs.writeFileSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`, fs.readFileSync(`${path.join(__dirname)}/defaultFiles/help.js`, 'utf8'))
       console.log(`[AutoRepair] Created commands/Misc/help.js file`)
     }
@@ -116,6 +124,11 @@ const DiscordCommandHandler = async (
     if (!fs.existsSync(`${path.join(mainDir, eventsDir)}/client/interactionCreate.js`)) {
       fs.writeFileSync(`${path.join(mainDir, eventsDir)}/client/interactionCreate.js`, fs.readFileSync(`${path.join(__dirname)}/defaultFiles/interactionCreate.js`, 'utf8'))
       console.log(`[AutoRepair] Created events/client/interactionCreate.js file`)
+    }
+
+    if (allowPrefixCommands===true && !fs.existsSync(`${path.join(mainDir, eventsDir)}/client/messageCreate.js`)) {
+      fs.writeFileSync(`${path.join(mainDir, eventsDir)}/client/messageCreate.js`, fs.readFileSync(`${path.join(__dirname)}/defaultFiles/messageCreate.js`, 'utf8'))
+      console.log(`[AutoRepair] Created events/client/messageCreate.js file`)
     }
   }
 
@@ -131,6 +144,7 @@ const DiscordCommandHandler = async (
   client.ownerIds = [ownerIds]
   client.ownerOnlyMessage = ownerOnlyMessage
   client.cooldownMessage = cooldownMessage
+  client.prefix = prefix
   client.login(config.token).catch((err) => {
     console.warn(err)
     throw new Error(`[Handler] Please check that your bot token is valid`)

@@ -16,10 +16,10 @@ module.exports = {
         commandName
       } = interaction
       const command = commands.get(commandName)
+      if (!command) return
       const checks = commandInvokedChecks.main.commandInvokedChecks(client, command, interaction.user.id)
       if (checks.ownerCheck) return interaction.reply({content: client.ownerOnlyMessage})
       if (checks.cooldown.active) return interaction.reply({content: client.cooldownMessage.replaceAll('{time}', `${checks.cooldown.personal}`)})
-      if (!command) return
 
       try {
         await command.execute(interaction, client)

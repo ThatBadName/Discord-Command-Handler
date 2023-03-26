@@ -25,17 +25,21 @@ module.exports = (client, mainDir, commandDir, config, directory = ["./events"])
           ownerOnly: command.ownerOnly || false,
           hide: command.hide || false,
           personalCooldown: command.personalCooldown || 0,
+          slash: command.slash || true,
           // globalCooldown: command.globalCooldown || 0,
           // guildCooldown: command.guildCooldown || 0,
           data: command.data,
           execute: command.execute
         }
-        if (command.testOnly === true) {
-          commands.set(command.data.name, command)
-          localCommandArray.push(command.data.toJSON())
-        } else {
-          commands.set(command.data.name, command)
-          globalCommandArray.push(command.data.toJSON())
+
+        commands.set(command.data.name, command)
+        
+        if (command.slash === true || command.slash === 'both') {
+          if (command.testOnly === true) {
+            localCommandArray.push(command.data.toJSON())
+          } else {
+            globalCommandArray.push(command.data.toJSON())
+          }
         }
       }
     }
