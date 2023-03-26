@@ -46,7 +46,7 @@ Handler.main.DiscordCommandHandler(client,  {
   },
   // This is where component files should be stored. The structure should follow: mainDir/mainComponentDir/<buttonDir|selectMenuDir>/<componentFile>
 
-  builtIn =  {
+  builtIn: {
     automaticRepair: true,
     helpCommand: true
   },
