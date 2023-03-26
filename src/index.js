@@ -74,7 +74,6 @@ const DiscordCommandHandler = async (
     ...builtIn
   }
 
-  console.log(path.join(mainDir, eventsDir))
   if (built.automaticRepair === true) {
     if (!fs.existsSync(`${path.join(mainDir, commandsDir)}`)) {
       fs.mkdirSync(`${path.join(mainDir, commandsDir)}`)
