@@ -19,7 +19,17 @@ module.exports = (client, mainDir, commandDir, config, directory = ["./events"])
         localCommandArray
       } = client
       for (const file of commandFiles) {
-        const command = require(`${path.join(mainDir, commandDir)}/${folder}/${file}`)
+        let command = require(`${path.join(mainDir, commandDir)}/${folder}/${file}`)
+        command = {
+          testOnly: command.testOnly || false,
+          ownerOnly: command.ownerOnly || false,
+          hide: command.hide || false,
+          personalCooldown: command.personalCooldown || 0,
+          // globalCooldown: command.globalCooldown || 0,
+          // guildCooldown: command.guildCooldown || 0,
+          data: command.data,
+          execute: command.execute
+        }
         if (command.testOnly === true) {
           commands.set(command.data.name, command)
           localCommandArray.push(command.data.toJSON())
@@ -36,7 +46,7 @@ module.exports = (client, mainDir, commandDir, config, directory = ["./events"])
     try {
       console.log(`[Global Handler] Started refreshing (/) commands`)
 
-      if (client.globalCommandArray.length >= 0) await rest.put(
+      if (client.globalCommandArray.length >= 1) await rest.put(
         Routes.applicationCommands(config.clientId), {
           body: client.globalCommandArray
         }
@@ -44,7 +54,7 @@ module.exports = (client, mainDir, commandDir, config, directory = ["./events"])
       console.log(`[Global Handler] Successfully reloaded (/) commands`)
       console.log(`[Local Handler] Started refreshing (/) commands`)
 
-      if (client.localCommandArray.length >= 0) await rest.put(
+      if (client.localCommandArray.length >= 1) await rest.put(
         Routes.applicationCommands(config.clientId, config.testGuild), {
           body: client.localCommandArray
         }

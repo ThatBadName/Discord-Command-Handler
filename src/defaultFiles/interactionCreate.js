@@ -1,6 +1,7 @@
 const {
   InteractionType
 } = require('discord.js')
+const commandInvokedChecks = require('@thatbadname/discord-command-handler')
 
 module.exports = {
   name: 'interactionCreate',
@@ -15,6 +16,9 @@ module.exports = {
         commandName
       } = interaction
       const command = commands.get(commandName)
+      const checks = commandInvokedChecks.main.commandInvokedChecks(client, command, interaction.user.id)
+      if (checks.ownerCheck) return interaction.reply({content: client.ownerOnlyMessage})
+      if (checks.cooldown.active) return interaction.reply({content: client.cooldownMessage.replaceAll('{time}', `${checks.cooldown.personal}`)})
       if (!command) return
 
       try {

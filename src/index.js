@@ -7,18 +7,29 @@ const loadEvents = require(`./handlers/handleEvents`)
 const loadCommands = require(`./handlers/handleCommands`)
 const loadComponents = require(`./handlers/handleComponents`)
 
+const generateId = require('./functions/generateId')
+const commandInvokedChecks = require('./functions/commandChecks')
+const cooldowns = require('./functions/cooldown')
+
 const DiscordCommandHandler = async (
   client, {
-    mainDir = '',
-    configFile = '',
-    commandsDir = '',
-    eventsDir = '',
+    mainDir = __dirname,
+    configFile = 'config.json',
+    commandsDir = '/commands',
+    eventsDir = '/events',
+    databaseDir = '',
     components = {
-      main: '',
-      buttons: '',
-      selectMenus: ''
+      main: '/components',
+      buttons: '/buttons',
+      selectMenus: '/selectMenus'
     },
-    automaticRepair = true
+    builtIn =  {
+      automaticRepair: true,
+      helpCommand: true
+    },
+    ownerIds = [],
+    ownerOnlyMessage = 'This command is owner only',
+    cooldownMessage = 'Please try again <t:{time}:R>'
   }
 ) => {
   // Check that everything is valid  
@@ -48,6 +59,7 @@ const DiscordCommandHandler = async (
   client.commands = new Collection()
   client.buttons = new Collection()
   client.selectMenus = new Collection()
+  client.cooldowns = new Collection()
   client.globalCommandArray = []
   client.localCommandArray = []
 
@@ -55,7 +67,7 @@ const DiscordCommandHandler = async (
     ...components
   }
 
-  if (automaticRepair === true) {
+  if (builtIn.automaticRepair === true) {
     if (!fs.existsSync(`${path.join(mainDir, commandsDir)}`)) {
       fs.mkdirSync(`${path.join(mainDir, commandsDir)}`)
       console.log(`[AutoRepair] Created commands dir`)
@@ -86,12 +98,12 @@ const DiscordCommandHandler = async (
       console.log(`[AutoRepair] Created events/client dir`)
     }
 
-    if (!fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc`)) {
+    if (builtIn.helpCommand===true && !fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc`)) {
       fs.mkdirSync(`${path.join(mainDir, commandsDir)}/Misc`)
       console.log(`[AutoRepair] Created commands/Misc dir`)
     }
 
-    if (!fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`)) {
+    if (builtIn.helpCommand===true && !fs.existsSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`)) {
       fs.writeFileSync(`${path.join(mainDir, commandsDir)}/Misc/help.js`, fs.readFileSync(`${path.join(__dirname)}/defaultFiles/help.js`, 'utf8'))
       console.log(`[AutoRepair] Created commands/Misc/help.js file`)
     }
@@ -110,10 +122,27 @@ const DiscordCommandHandler = async (
   loadEvents(client, mainDir, eventsDir)
   loadComponents(client, mainDir, component.main)
   loadCommands(client, mainDir, commandsDir, config)
+  client.dirs = {
+    main: mainDir,
+    commands: commandsDir,
+    events: eventsDir,
+    database: databaseDir
+  }
+  client.ownerIds = [ownerIds]
+  client.ownerOnlyMessage = ownerOnlyMessage
+  client.cooldownMessage = cooldownMessage
   client.login(config.token).catch((err) => {
     console.warn(err)
     throw new Error(`[Handler] Please check that your bot token is valid`)
   })
 }
 
-module.exports = DiscordCommandHandler
+module.exports.main = {
+  DiscordCommandHandler,
+  commandInvokedChecks,
+  cooldowns
+}
+
+module.exports.functions = {
+  generateId
+}

@@ -6,6 +6,7 @@ const {
 
 module.exports = {
   testOnly: true,
+  ownerOnly: false,
   hide: false,
   data: new SlashCommandBuilder()
     .setName('help')
@@ -16,19 +17,19 @@ module.exports = {
     const helpEmbed = new EmbedBuilder()
       .setTitle(`${client.user.username} Help Menu`)
 
-    for (const folder of fs.readdirSync(`./src/commands`, 'ascii')) {
+    for (const folder of fs.readdirSync(`./commands`, 'ascii')) {
       helpEmbed.addFields({
         name: `${folder}`,
         value: `${
-          fs.readdirSync(`./src/commands/${folder}`, 'ascii')
+          fs.readdirSync(`./commands/${folder}`, 'ascii')
             .map((file) => {
-              const cmd = require(`../../../src/commands/${folder}/${file}`)
+              const cmd = require(`../../commands/${folder}/${file}`)
               return cmd.hide === false ? `\`${cmd.data.name}\`` : ''
             })
             .join(`, `)
-            .length === 0 ? 'No Commands' : fs.readdirSync(`./src/commands/${folder}`, 'ascii')
+            .length === 0 ? 'No Commands' : fs.readdirSync(`./commands/${folder}`, 'ascii')
               .map((file) => {
-                const cmd = require(`../../../src/commands/${folder}/${file}`)
+                const cmd = require(`../../commands/${folder}/${file}`)
                 return cmd.hide === false ? `\`${cmd.data.name}\`` : ''
               })
               .join(`, `)
