@@ -3,11 +3,11 @@ const {
   SlashCommandBuilder,
   EmbedBuilder
 } = require('discord.js')
+const path = require('path')
 
 module.exports = {
   testOnly: true,
   ownerOnly: false,
-  hide: false,
   data: new SlashCommandBuilder()
     .setName('help')
     .setDescription('Get a list of all bot commands')
@@ -17,20 +17,20 @@ module.exports = {
     const helpEmbed = new EmbedBuilder()
       .setTitle(`${client.user.username} Help Menu`)
 
-    for (const folder of fs.readdirSync(`./commands`, 'ascii')) {
+    for (const folder of fs.readdirSync(`${path.join(client.dirs.main, client.dirs.commands)}`, 'ascii')) {
       helpEmbed.addFields({
         name: `${folder}`,
         value: `${
-          fs.readdirSync(`./commands/${folder}`, 'ascii')
+          fs.readdirSync(`${path.join(client.dirs.main, client.dirs.commands)}/${folder}`, 'ascii')
             .map((file) => {
               const cmd = require(`../../commands/${folder}/${file}`)
-              return cmd.hide === false ? `\`${cmd.data.name}\`` : ''
+              return cmd.hide === undefined ? `\`${cmd.data.name}\`` : cmd.hide === false ? `\`${cmd.data.name}\`` : ''
             })
             .join(`, `)
-            .length === 0 ? 'No Commands' : fs.readdirSync(`./commands/${folder}`, 'ascii')
+            .length === 0 ? 'No Commands' : fs.readdirSync(`${path.join(client.dirs.main, client.dirs.commands)}/${folder}`, 'ascii')
               .map((file) => {
                 const cmd = require(`../../commands/${folder}/${file}`)
-                return cmd.hide === false ? `\`${cmd.data.name}\`` : ''
+                return cmd.hide === undefined ? `\`${cmd.data.name}\`` : cmd.hide === false ? `\`${cmd.data.name}\`` : ''
               })
               .join(`, `)
             }`,

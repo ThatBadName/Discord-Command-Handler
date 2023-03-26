@@ -25,7 +25,7 @@ module.exports = (client, mainDir, commandDir, config, directory = ["./events"])
           ownerOnly: command.ownerOnly || false,
           hide: command.hide || false,
           personalCooldown: command.personalCooldown || 0,
-          slash: command.slash || true,
+          slash: command.slash,
           // globalCooldown: command.globalCooldown || 0,
           // guildCooldown: command.guildCooldown || 0,
           data: command.data,
@@ -33,8 +33,7 @@ module.exports = (client, mainDir, commandDir, config, directory = ["./events"])
         }
 
         commands.set(command.data.name, command)
-        
-        if (command.slash === true || command.slash === 'both') {
+        if (command.slash === true || command.slash === 'both' || command.slash === undefined) {
           if (command.testOnly === true) {
             localCommandArray.push(command.data.toJSON())
           } else {

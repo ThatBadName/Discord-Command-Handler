@@ -145,6 +145,7 @@ const DiscordCommandHandler = async (
   client.ownerOnlyMessage = ownerOnlyMessage
   client.cooldownMessage = cooldownMessage
   client.prefix = prefix
+  client.allowPrefixCommands = allowPrefixCommands
   client.login(config.token).catch((err) => {
     console.warn(err)
     throw new Error(`[Handler] Please check that your bot token is valid`)

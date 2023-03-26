@@ -56,14 +56,20 @@ Handler.main.DiscordCommandHandler(client,  {
   helpCommand, when true will create the help command and its parent directory. For this to work automaticRepair must also be enabled.
   */
 
-  ownerIds = [],
+  ownerIds: [],
   // Put any ids of users that you want to be able to run ownerOnly: true commands
 
-  ownerOnlyMessage = 'This command is owner only',
+  ownerOnlyMessage: 'This command is owner only',
   // This is the message that will be sent if a user tries to use an ownerOnly command
 
-  cooldownMessage = 'Please try again <t:{time}:R>',
+  cooldownMessage: 'Please try again <t:{time}:R>',
   // This is the message that will be sent if a user tries to use a command while they are on cooldown. {time} will be replaced with the epoch timestamp of when the cooldown ends
+
+  allowPrefixCommands: false
+  // Should the bot let prefixed commands work
+
+  prefix: '!'
+  // The prefix of the bot. Only works if allowPrefixCommands: true
 })
 ```
 ### Making a new command
@@ -77,6 +83,7 @@ module.exports = {
   testOnly: true, // If true this command will only be available in your test server
   ownerOnly: false, // If true this command will only be runnable if the users id is part of ownerIds
   hide: false, // If true this command will be hidden from the built in help command
+  slash: true // Make it a slash command. You can use "both" to make it both slash and prefix
   data: new SlashCommandBuilder() // The data of the slash command
     .setName('ping') // The name of the command
     .setDescription('Pong!'), // The commands description
@@ -91,6 +98,28 @@ module.exports = {
   }
 }
 ```
+And this is a prefixed command
+```js
+module.exports = {
+  testOnly: true, // If true this command will only be available in your test server
+  ownerOnly: false, // If true this command will only be runnable if the users id is part of ownerIds
+  hide: false, // If true this command will be hidden from the built in help command
+  slash: false // Make it not a slash command
+  data: {
+    name: 'ping' // Name of the command
+  },
+
+  async execute(message, args, client) {
+    // Put your commands code here
+
+    message.reply({
+      content:
+        `Pong!`
+    }) // Reply to the message with "Pong!"
+  }
+}
+```
+
 
 ### Making a new event
 This is an example of a simple ready event
