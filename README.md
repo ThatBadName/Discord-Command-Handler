@@ -1,6 +1,6 @@
 # Discord.JS v14 Command Handler
-This is an advanced command handler using Discord.js v14\
-[Support Discord Server](https://discord.gg/9jFqS5H43Q)
+This is an advanced command handler using Discord.js v14
+![Discord Banner 4](https://discordapp.com/api/guilds/994642021425877112/widget.png?style=banner4)
 
 ## Installation
 Run `npm i @thatbadname/discord-command-handler discord.js` in a console and you are done!
